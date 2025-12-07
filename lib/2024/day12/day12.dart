@@ -1,15 +1,19 @@
 import 'package:advent_of_code/day.dart';
 import 'package:advent_of_code/utils/math.dart';
 
-class Day12 extends Day {
-  Day12(super.day, super.year);
-
-  Map<Vector2, List<Vector2>> _zones = {};
-  Matrix<String> _map = Matrix<String>.empty();
+class Day12Year2024 extends Day {
+  @override
+  int get day => 12;
 
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
-    final areas = await readInput<Matrix<String>>(filename);
+  int get year => 2024;
+
+  Map<Vector2, List<Vector2>> _zones = {};
+  late Matrix<String> _map;
+
+  @override
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
+    final areas = await readInput<Matrix<String>>(filename, input);
     final values = calculateAreaPerimeter(areas);
 
     var result = 0;
@@ -21,63 +25,13 @@ class Day12 extends Day {
   }
 
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
-    _map = await readInput<Matrix<String>>(filename);
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
+    _map = await readInput<Matrix<String>>(filename, input);
     _zones = mapZones(_map);
 
     print(_zones[Vector2.zero()]);
 
     return Future.value(0);
-  }
-
-  int _countCorners(Vector2 currentPos) {
-    var children = _zones[currentPos]!;
-
-    if (children.isEmpty) return 4;
-    if (children.length == 1) return 2;
-
-    var firstChild = children[0] - currentPos;
-    var secondChild = children[1] - currentPos;
-    var isDiagonal = (firstChild + secondChild).abs() == Vector2.one();
-    if (children.length == 2 && isDiagonal) {
-      if (_map.get(firstChild + secondChild) == _map.get(currentPos)) {
-        return 2;
-      }
-
-      return 1;
-    }
-
-    if (children.length == 3) {
-      var result = children[0] + children[1] + children[2];
-      var diagonal = getDiagonalPositions(result);
-      var points = 0;
-      for (var pos in diagonal) {
-        if (_map.get(pos) == _map.get(currentPos)) {
-          points++;
-        }
-      }
-
-      return points;
-    }
-
-    if (children.length == 4) {
-      var diagonal = [
-        Vector2(1, 1),
-        Vector2(-1, -1),
-        Vector2(1, -1),
-        Vector2(-1, 1),
-      ];
-      var points = 0;
-      for (var pos in diagonal) {
-        if (_map.get(pos) == _map.get(currentPos)) {
-          points++;
-        }
-      }
-
-      return points;
-    }
-
-    return 0;
   }
 
   List<Vector2> getDiagonalPositions(Vector2 child) {
@@ -171,4 +125,54 @@ class Day12 extends Day {
 
     return map;
   }
+
+  // int _countCorners(Vector2 currentPos) {
+  //   var children = _zones[currentPos]!;
+
+  //   if (children.isEmpty) return 4;
+  //   if (children.length == 1) return 2;
+
+  //   var firstChild = children[0] - currentPos;
+  //   var secondChild = children[1] - currentPos;
+  //   var isDiagonal = (firstChild + secondChild).abs() == Vector2.one();
+  //   if (children.length == 2 && isDiagonal) {
+  //     if (_map.get(firstChild + secondChild) == _map.get(currentPos)) {
+  //       return 2;
+  //     }
+
+  //     return 1;
+  //   }
+
+  //   if (children.length == 3) {
+  //     var result = children[0] + children[1] + children[2];
+  //     var diagonal = getDiagonalPositions(result);
+  //     var points = 0;
+  //     for (var pos in diagonal) {
+  //       if (_map.get(pos) == _map.get(currentPos)) {
+  //         points++;
+  //       }
+  //     }
+
+  //     return points;
+  //   }
+
+  //   if (children.length == 4) {
+  //     var diagonal = [
+  //       Vector2(1, 1),
+  //       Vector2(-1, -1),
+  //       Vector2(1, -1),
+  //       Vector2(-1, 1),
+  //     ];
+  //     var points = 0;
+  //     for (var pos in diagonal) {
+  //       if (_map.get(pos) == _map.get(currentPos)) {
+  //         points++;
+  //       }
+  //     }
+
+  //     return points;
+  //   }
+
+  //   return 0;
+  // }
 }

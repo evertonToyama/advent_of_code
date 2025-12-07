@@ -1,11 +1,15 @@
 import 'package:advent_of_code/day.dart';
 
-class Day9 extends Day {
-  Day9(super.day, super.year);
+class Day9Year2024 extends Day {
+  @override
+  int get day => 9;
 
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
-    var (disk, _) = await readInput<(List<int?>, List<int>)>(filename);
+  int get year => 2024;
+
+  @override
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
+    var (disk, _) = await readInput<(List<int?>, List<int>)>(filename, input);
     var index = 0;
 
     for (var i = disk.length - 1; i > 0; i--) {
@@ -23,8 +27,11 @@ class Day9 extends Day {
   }
 
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
-    var (disk, filesizes) = await readInput<(List<int?>, List<int>)>(filename);
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
+    var (disk, filesizes) = await readInput<(List<int?>, List<int>)>(
+      filename,
+      input,
+    );
     var index = 0;
     var lastNum = 99999;
     var currentFilesizeIndex = filesizes.length;

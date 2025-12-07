@@ -1,12 +1,16 @@
 import 'package:advent_of_code/day.dart';
 import 'package:advent_of_code/utils/math.dart';
 
-class Day8 extends Day {
-  Day8(super.day, super.year);
+class Day8Year2024 extends Day {
+  @override
+  int get day => 8;
 
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
-    var matrix = await readInput<Matrix<String>>(filename);
+  int get year => 2024;
+
+  @override
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
+    var matrix = await readInput<Matrix<String>>(filename, input);
     var antinodes = <Vector2>{};
     var antennas = <String, List<Vector2>>{};
 
@@ -49,8 +53,8 @@ class Day8 extends Day {
   }
 
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
-    var matrix = await readInput<Matrix<String>>(filename);
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
+    var matrix = await readInput<Matrix<String>>(filename, input);
     var antinodes = <Vector2>{};
     var antennas = <String, List<Vector2>>{};
 

@@ -1,22 +1,28 @@
 import 'package:advent_of_code/day.dart';
 
-class Day5 extends Day {
-  Day5(super.day, super.year);
+class Day5Year2024 extends Day {
+  @override
+  int get day => 5;
 
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
+  int get year => 2024;
+
+  @override
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
     var pages =
         await readInput<({Map<int, List<int>> rules, List<List<int>> updates})>(
           filename,
+          input,
         );
     return sumValidMedian(pages.rules, pages.updates);
   }
 
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
     var pages =
         await readInput<({Map<int, List<int>> rules, List<List<int>> updates})>(
           filename,
+          input,
         );
 
     return sumSortedMedian(pages.rules, pages.updates);

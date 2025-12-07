@@ -1,12 +1,16 @@
 import 'package:advent_of_code/day.dart';
 import 'package:advent_of_code/utils/math.dart';
 
-class Day10 extends Day {
-  Day10(super.day, super.year);
+class Day10Year2024 extends Day {
+  @override
+  int get day => 10;
 
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
-    var map = await readInput<Matrix<int>>(filename);
+  int get year => 2024;
+
+  @override
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
+    var map = await readInput<Matrix<int>>(filename, input);
 
     // 238 - too low - matrix but (rows, columns)
     // 674 - right
@@ -15,8 +19,8 @@ class Day10 extends Day {
   }
 
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
-    var map = await readInput<Matrix<int>>(filename);
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
+    var map = await readInput<Matrix<int>>(filename, input);
 
     return calculateTrailheadRating(map);
   }

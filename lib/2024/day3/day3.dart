@@ -36,19 +36,23 @@ Handle the new instructions; what do you get if you add up all of the results of
 Your puzzle answer was 103811193.
 */
 
-class Day3 extends Day {
-  Day3(super.day, super.year);
+class Day3Year2024 extends Day {
+  @override
+  int get day => 3;
 
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
-    var content = await readInput<String>(filename);
+  int get year => 2024;
+
+  @override
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
+    var content = await readInput<String>(filename, input);
 
     return findMultiplication(content);
   }
 
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
-    var content = await readInput<String>(filename);
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
+    var content = await readInput<String>(filename, input);
 
     return findDoDont(content);
   }

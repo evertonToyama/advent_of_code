@@ -2,15 +2,19 @@ import 'dart:math';
 
 import 'package:advent_of_code/day.dart';
 
-class Day11 extends Day {
-  Day11(super.day, super.year);
+class Day11Year2024 extends Day {
+  @override
+  int get day => 11;
+
+  @override
+  int get year => 2024;
 
   /*
   186996 - right
   */
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
-    var stones = await readInput<List<int>>(filename);
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
+    var stones = await readInput<List<int>>(filename, input);
 
     for (var i = 0; i < 25; i++) {
       stones = blink(stones);
@@ -23,8 +27,8 @@ class Day11 extends Day {
     221683913164898 - right*
   */
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
-    var stones = await readInput<List<int>>(filename);
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
+    var stones = await readInput<List<int>>(filename, input);
     // print(stones);
 
     // for (var i = 0; i < 75; i++) {

@@ -48,12 +48,16 @@ Update your analysis by handling situations where the Problem Dampener can remov
 Your puzzle answer was 439.
 */
 
-class Day2 extends Day {
-  Day2(super.day, super.year);
+class Day2Year2024 extends Day {
+  @override
+  int get day => 2;
 
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
-    var reports = await readInput<List<List<int>>>(filename);
+  int get year => 2024;
+
+  @override
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
+    var reports = await readInput<List<List<int>>>(filename, input);
 
     int count = 0;
     for (var report in reports) {
@@ -67,8 +71,8 @@ class Day2 extends Day {
   }
 
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
-    var reports = await readInput(filename);
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
+    var reports = await readInput(filename, input);
 
     int count = 0;
     for (var report in reports) {
