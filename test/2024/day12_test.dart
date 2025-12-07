@@ -18,7 +18,7 @@ MMMISSJEEE''';
     // var map = loadContent(file);
     var map = file;
 
-    var areas = Day12(12, 2024).calculateAreaPerimeter(map as Matrix<String>);
+    var areas = Day12Year2024().calculateAreaPerimeter(map as Matrix<String>);
     var result = 0;
     for (var (area, perimeter) in areas) {
       result += area * perimeter;
@@ -41,6 +41,6 @@ MMMISSJEEE''';
 
     // var map = loadContent(file);
     var map = file;
-    var zones = Day12(12, 2024).mapZones(map as Matrix<String>);
+    var zones = Day12Year2024().mapZones(map as Matrix<String>);
   });
 }

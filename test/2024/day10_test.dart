@@ -14,8 +14,8 @@ void main() {
       [8, 7, 6, 5],
       [9, 8, 7, 6],
     ]);
-    // var map = Day10(10, 2024).loadContents(file);
-    var map = ref;
+    final day = Day10Year2024();
+    var map = day.loadContent(file);
     expect(map, equals(ref));
   });
 
@@ -30,7 +30,7 @@ void main() {
       [8, 1, 1, 1, 1, 1, 8],
       [9, 1, 1, 1, 1, 1, 9],
     ]);
-    var result = Day10(10, 2024).calculateTrailheadScore(map);
+    var result = Day10Year2024().calculateTrailheadScore(map);
 
     expect(result, equals(2));
   });

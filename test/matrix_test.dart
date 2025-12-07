@@ -108,5 +108,23 @@ void main() {
         expect(matrix, expected);
       });
     });
+
+    test('Constructor', () {
+      var matrix = Matrix<int>(columns: 2, rows: 2, defaultValue: 0);
+      // matrix[(0, 0)] = 0;
+      expect(matrix, isA<Matrix<int>>());
+      // expect(matrix.get(Vector2.zero()), throwsException);
+      // print(matrix[(0, 0)]);
+    });
+
+    test('From List', () {
+      final List<List<int>> list = [[], []];
+      final matrix = Matrix<int>.from(list);
+      expect(matrix, isA<Matrix<int>>());
+    });
+
+    test('type error', () {
+      expect(() => Matrix<int>(columns: 2, rows: 2), throwsA(isA<TypeError>()));
+    });
   });
 }
