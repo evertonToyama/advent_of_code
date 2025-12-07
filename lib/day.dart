@@ -1,17 +1,15 @@
 import 'package:advent_of_code/utils/file.dart';
 
 abstract class Day {
-  final int day;
-  final int year;
+  int get day;
+  int get year;
 
-  const Day(this.day, this.year);
+  Future<Object> part1({String filename = "input.txt", String? input});
 
-  Future<Object> part1({String filename = "input.txt"});
+  Future<Object> part2({String filename = "input.txt", String? input});
 
-  Future<Object> part2({String filename = "input.txt"});
-
-  Future<E> readInput<E>(String filename) async {
-    var content = await FileUtils.readFromDay(day, year);
+  Future<E> readInput<E>(String filename, String? input) async {
+    var content = input ?? await FileUtils.readFromDay(day, year);
     return loadContent(content) as E;
   }
 

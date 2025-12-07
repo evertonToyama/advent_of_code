@@ -13,6 +13,8 @@ import 'package:advent_of_code/2024/day6/day6.dart';
 import 'package:advent_of_code/2024/day7/day7.dart';
 import 'package:advent_of_code/2024/day8/day8.dart';
 import 'package:advent_of_code/2024/day9/day9.dart';
+import 'package:advent_of_code/2025/day1/day1.dart';
+import 'package:advent_of_code/2025/day2/day2.dart';
 import 'package:advent_of_code/utils/file.dart';
 import 'package:args/args.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +25,9 @@ const String version = '0.0.1';
 ArgParser buildParser() {
   return ArgParser()
     ..addCommand('fetch')
+    ..addCommand('answer')
+    ..addCommand('delete')
+    ..addOption('test', abbr: 't')
     ..addFlag(
       'help',
       abbr: 'h',
@@ -30,14 +35,15 @@ ArgParser buildParser() {
       help: 'Print this usage information.',
     )
     ..addFlag(
-      'verbose',
-      abbr: 'v',
+      'check',
+      abbr: 'c',
       negatable: false,
-      help: 'Show additional command output.',
+      help: 'Check if the answer is right according to the challenge input',
     )
-    ..addFlag('part', abbr: 'p', negatable: false, help: 'Part')
-    ..addFlag('day', abbr: 'd', negatable: false, help: 'Challenge day')
-    ..addFlag('version', negatable: false, help: 'Print the tool version.');
+    ..addOption('part', abbr: 'p', help: 'Part')
+    ..addOption('day', abbr: 'd', help: 'Challenge day')
+    ..addOption('year', abbr: 'y', help: 'Challenge year')
+    ..addFlag('version', abbr: 'v', help: 'Print the tool version.');
 }
 
 void printUsage(ArgParser argParser) {
@@ -47,33 +53,34 @@ void printUsage(ArgParser argParser) {
 
 final challenges = {
   2024: [
-    Day1(1, 2024),
-    Day2(2, 2024),
-    Day3(3, 2024),
-    Day4(4, 2024),
-    Day5(5, 2024),
-    Day6(6, 2024),
-    Day7(7, 2024),
-    Day8(8, 2024),
-    Day9(9, 2024),
-    Day10(10, 2024),
-    Day11(11, 2024),
-    Day12(12, 2024),
+    Day1Year2024(),
+    Day2Year2024(),
+    Day3Year2024(),
+    Day4Year2024(),
+    Day5Year2024(),
+    Day6Year2024(),
+    Day7Year2024(),
+    Day8Year2024(),
+    Day9Year2024(),
+    Day10Year2024(),
+    Day11Year2024(),
+    Day12Year2024(),
   ],
+  2025: [Day1Year2025(), Day2Year2025()],
 };
 
 Future<void> main(List<String> arguments) async {
   final ArgParser argParser = buildParser();
   try {
     final ArgResults results = argParser.parse(arguments);
-    bool verbose = false;
     int day = 1;
-    int year = 2024;
+    int year = 2025;
     int indexPosition = 0;
     int part = 1;
+    String answer;
+    bool checkAnswer = false;
     Object result;
 
-    // Process the parsed arguments.
     if (results.flag('help')) {
       printUsage(argParser);
       return;
@@ -82,23 +89,28 @@ Future<void> main(List<String> arguments) async {
       print('advent_of_code version: $version');
       return;
     }
-    if (results.flag('day')) {
-      day = int.parse(results.rest[0]);
+    if (results.flag("check")) {
+      checkAnswer = true;
+    }
+
+    if (results.wasParsed('day')) {
+      day = int.parse(results.option('day')!);
       indexPosition = day - 1;
     }
-    if (results.flag('part')) {
-      part = int.parse(results.rest[1]);
+    if (results.wasParsed('part')) {
+      part = int.parse(results.option('part')!);
     }
-    if (results.flag('verbose')) {
-      verbose = true;
+    if (results.wasParsed('year')) {
+      year = int.parse(results.option('year')!);
     }
 
     if (results.command?.name == "fetch") {
-      day = int.parse(results.arguments[1]);
-      result = await fetchInput(day);
-      if (result == 200) {
-        print("Input fetched");
-      }
+      fetchInput(day, year);
+      return;
+    }
+
+    if (results.command?.name == "delete") {
+      FileUtils.deleteAnswer(day: 1, year: 2025, part: 1);
       return;
     }
 
@@ -114,43 +126,53 @@ Future<void> main(List<String> arguments) async {
 
     stopwatch.stop();
 
+    if (results.command?.name == "answer") {
+      FileUtils.writeAnswer(
+        day: day,
+        year: year,
+        part: part,
+        answer: result.toString(),
+      );
+    }
+
     copyToClipboard(result.toString());
     print("\nFinal Result:");
     print(result);
-    print("\nTime Elapsed: ${stopwatch.elapsed}");
-
-    if (verbose) {
-      // Act on the arguments provided.
-      print('Positional arguments: ${results.rest}');
-      print('[VERBOSE] All arguments: ${results.arguments}');
+    if (checkAnswer) {
+      answer = await FileUtils.getAnswer(day: day, year: year, part: part);
+      if (answer == result.toString()) {
+        print("Right Answer");
+      } else {
+        print("Try Again");
+      }
     }
+    print("\nTime Elapsed: ${stopwatch.elapsed}");
   } on FormatException catch (e) {
-    // Print usage information if an invalid argument was provided.
     print(e.message);
-    print('');
     printUsage(argParser);
   }
 }
 
-Future<int> fetchInput(int day) async {
-  var uri = Uri.https('adventofcode.com', '/2024/day/$day/input');
-  var req = http.Request('get', uri);
-  req.headers.addAll({
-    "Cookie":
-        "session=53616c7465645f5f23c694c99c30d0e85d3fb1432b6ce3ded6849ad0999a9a66b5ef8393413cc7f2d20039b8a9b550c423538d755c94ff873f6f824cc9f31a24",
-  });
-  var response = await req.send();
+Future<void> fetchInput(int day, int year) async {
+  var uri = Uri.https('adventofcode.com', '/$year/day/$day/input');
+  var cookie = await FileUtils.readFromFile(".env");
+  var headers = {"Cookie": cookie};
 
-  if (response.statusCode != 200) {
-    print('Error on fetch: ${response.statusCode}');
-    return response.statusCode;
+  try {
+    var response = await http.get(uri, headers: headers);
+
+    if (response.statusCode != 200) {
+      print('Error: ${response.statusCode}');
+      return;
+    }
+
+    var contents = response.bodyBytes;
+    contents = trimContent(contents);
+    FileUtils.writeToFile('./lib/$year/day$day/input.txt', contents);
+    print("Input fetched");
+  } on Exception catch (ex) {
+    print(ex);
   }
-
-  var contents = await response.stream.toBytes();
-  contents = trimContent(contents);
-  FileUtils.writeToFile('./lib/2024/day$day/input.txt', contents);
-
-  return response.statusCode;
 }
 
 Uint8List trimContent(Uint8List content) {
