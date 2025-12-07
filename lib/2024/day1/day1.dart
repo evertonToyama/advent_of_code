@@ -1,11 +1,18 @@
 import 'package:advent_of_code/day.dart';
 
-class Day1 extends Day {
-  Day1(super.day, super.year);
+class Day1Year2024 extends Day {
+  @override
+  int get day => 1;
 
   @override
-  Future<Object> part1({String filename = "input.txt"}) async {
-    final (left, right) = await readInput<(List<int>, List<int>)>(filename);
+  int get year => 2024;
+
+  @override
+  Future<Object> part1({String filename = "input.txt", String? input}) async {
+    final (left, right) = await readInput<(List<int>, List<int>)>(
+      filename,
+      input,
+    );
 
     sort(left);
     sort(right);
@@ -14,8 +21,11 @@ class Day1 extends Day {
   }
 
   @override
-  Future<Object> part2({String filename = "input.txt"}) async {
-    var (left, right) = await readInput<(List<int>, List<int>)>(filename);
+  Future<Object> part2({String filename = "input.txt", String? input}) async {
+    var (left, right) = await readInput<(List<int>, List<int>)>(
+      filename,
+      input,
+    );
 
     sort(left);
     sort(right);
