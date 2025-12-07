@@ -10,24 +10,26 @@ class Matrix<T extends Object?> implements Iterable<T> {
   }
 
   Matrix.from(List<List<T>> values) {
+    if (values.isEmpty) {
+      throw Exception("Cannot create a matrix with no rows");
+    }
+
     _columns = values[0].length;
-    for (var list in values) {
-      if (list.length != _columns) {
+    if (_columns == 0) {
+      throw Exception("Cannot create a matrix with no columns");
+    }
+
+    for (var row in values) {
+      if (row.length != _columns) {
         throw Exception('All the rows must be the same size');
       }
 
-      _list.addAll(list);
+      _list.addAll(row);
     }
   }
 
-  Matrix.empty() {
-    _columns = 0;
-    _defaultValue = null;
-    _list = [];
-  }
-
-  int get rowsLength => _list.length ~/ _columns;
-  int get colsLength => _columns;
+  int get rowsLength => _columns;
+  int get colsLength => _list.length ~/ _columns;
   int get capacity => _list.length;
 
   void clear() {
@@ -37,11 +39,11 @@ class Matrix<T extends Object?> implements Iterable<T> {
   }
 
   void addRow(List<T> row) {
-    // if (row.length != rowsLength) {
-    //   throw Exception(
-    //     'The new row must be the same size of the previous rows. Row: [${row.length}] - RowsLength: [$rowsLength]',
-    //   );
-    // }
+    if (row.length != rowsLength) {
+      throw Exception(
+        'The new row must be the same size of the previous rows. Row: [${row.length}] - RowsLength: [$rowsLength]',
+      );
+    }
 
     _list.addAll(row);
   }
