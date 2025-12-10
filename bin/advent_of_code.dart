@@ -15,6 +15,7 @@ import 'package:advent_of_code/2024/day8/day8.dart';
 import 'package:advent_of_code/2024/day9/day9.dart';
 import 'package:advent_of_code/2025/day1/day1.dart';
 import 'package:advent_of_code/2025/day2/day2.dart';
+import 'package:advent_of_code/2025/day3/day3.dart';
 import 'package:advent_of_code/utils/file.dart';
 import 'package:args/args.dart';
 import 'package:http/http.dart' as http;
@@ -66,7 +67,7 @@ final challenges = {
     Day11Year2024(),
     Day12Year2024(),
   ],
-  2025: [Day1Year2025(), Day2Year2025()],
+  2025: [Day1Year2025(), Day2Year2025(), Day3Year2025()],
 };
 
 Future<void> main(List<String> arguments) async {
