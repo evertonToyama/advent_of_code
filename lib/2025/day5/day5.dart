@@ -34,39 +34,24 @@ class Day5Year2025 extends Day {
       filename,
       input,
     );
-    var freshIngredientsIntervals = <(int begin, int end)>[];
     var count = 0;
+    var ingredients = <int?>[null];
 
     for (var (begin, end) in freshIngredients) {
-      var exists = false;
-      for (var i = 0; i < freshIngredientsIntervals.length; i++) {
-        var freshBegin = freshIngredientsIntervals[i].$1;
-        var freshEnd = freshIngredientsIntervals[i].$2;
-        if (freshBegin > end || freshEnd < begin) {
+      for (var i = 0; i < ingredients.length; i++) {
+        var v = ingredients[i];
+
+        if (begin < v!) {
+          ingredients.insert(i, begin);
           continue;
         }
 
-        if (freshBegin < end) {
-          freshBegin = begin;
-          exists = true;
+        if (end < v) {
+          ingredients.insert(i, end);
+          continue;
         }
-        if (freshEnd > begin) {
-          freshEnd = end;
-          exists = true;
-        }
-
-        if (exists) {
-          freshIngredientsIntervals[i] = (freshBegin, freshEnd);
-          break;
-        }
-      }
-
-      if (!exists) {
-        freshIngredientsIntervals.add((begin, end));
       }
     }
-
-    print(freshIngredientsIntervals);
 
     return count;
   }
