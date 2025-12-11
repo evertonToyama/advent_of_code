@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:advent_of_code/day.dart';
 
 class Day5Year2025 extends Day {
@@ -28,6 +30,7 @@ class Day5Year2025 extends Day {
     return count;
   }
 
+  // 337098394852955 - too low
   @override
   Future<Object> part2({String filename = "input.txt", String? input}) async {
     var (freshIngredients, _) = await readInput<(List<(int, int)>, List<int>)>(
@@ -35,35 +38,30 @@ class Day5Year2025 extends Day {
       input,
     );
     var count = 0;
-    var ingredients = <int?>[null];
+    var ingredients = <(int, int)>[];
+    var lastRangeIndex = 0;
 
-    for (var (begin, end) in freshIngredients) {
-      for (var i = 0; i < ingredients.length; i++) {
-        var v = ingredients[i];
+    freshIngredients.sort((a, b) => a.$1.compareTo(b.$1));
+    ingredients.add(freshIngredients[lastRangeIndex]);
+    for (var i = 1; i < freshIngredients.length; i++) {
+      var (begin, end) = freshIngredients[i];
 
-        if (begin < v!) {
-          ingredients.insert(i, begin);
-          continue;
-        }
-
-        if (end < v) {
-          ingredients.insert(i, end);
-          continue;
-        }
+      if (begin <= ingredients[lastRangeIndex].$2 + 1) {
+        ingredients[lastRangeIndex] = (
+          ingredients[lastRangeIndex].$1,
+          max(ingredients[lastRangeIndex].$2, end),
+        );
+      } else {
+        ingredients.add((begin, end));
+        lastRangeIndex++;
       }
+    }
+
+    for (var (begin, end) in ingredients) {
+      count += end - begin + 1;
     }
 
     return count;
-  }
-
-  bool intervalContainElement(List<(int, int)> intervals, int element) {
-    for (var (begin, end) in intervals) {
-      if (element >= begin && element <= end) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   @override
